@@ -1,0 +1,244 @@
+{
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      // uni-ui 规则如下配置
+      // uv-ui 规则如下配置
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+      "^uv-(.*)": "@climblee/uv-ui/components/uv-$1/uv-$1.vue"
+    }
+  },
+  "pages": [
+    {
+      "path": "pages/home/home",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/account",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/apply",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/login/setPsw",
+      "style": {
+        "navigationBarTitleText": "设置密码",
+        "navigationBarBackgroundColor": "#fff"
+      }
+    },
+    {
+      "path": "pages/chat/chat"
+    },
+    {
+      "path": "pages/friend/friend",
+      "style": {
+        "navigationBarTitleText": "好友"
+      }
+    },
+    {
+      "path": "pages/newFriend/newFriend",
+      "style": {
+        "navigationBarTitleText": "新好友"
+      }
+    },
+    {
+      "path": "pages/contact/contact",
+      "style": {
+        "navigationBarTitleText": "通讯录"
+      }
+    },
+    {
+      "path": "pages/group/group"
+    },
+    {
+      "path": "pages/mine/mine",
+      "style": {
+        "navigationBarTitleText": "更多"
+      }
+    },
+    {
+      "path": "pages/mine/mine-account",
+      "style": {
+        "navigationBarTitleText": "账号管理"
+      }
+    },
+    {
+      "path": "pages/friend/friend-search"
+    },
+    {
+      "path": "pages/common/user-info",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/chat/chat-box",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/friend/friend-add"
+    },
+    {
+      "path": "pages/group/group-info",
+      "style": {
+        "navigationBarTitleText": ""
+      }
+    },
+    {
+      "path": "pages/group/group-edit",
+      "style": {
+        "navigationBarTitleText": "编辑"
+      }
+    },
+    {
+      "path": "pages/group/group-add"
+    },
+    {
+      "path": "pages/group/group-invite",
+      "style": {
+        "navigationBarTitleText": "邀请好友"
+      }
+    },
+    {
+      "path": "pages/group/group-member"
+    },
+    {
+      "path": "pages/mine/mine-edit"
+    },
+    {
+      "path": "pages/mine/mine-password"
+    },
+    {
+      "path": "pages/webview/webview"
+    },
+    {
+      "path": "pages/course/detail",
+      "style": {
+        "navigationBarTitleText": "课程详情"
+      }
+    },
+    {
+      "path": "pages/identityAuth/index",
+      "style": {
+        "navigationBarTitleText": "认证申请",
+        "navigationBarBackgroundColor": "#F8FAFD"
+      }
+    },
+    {
+      "path": "pages/mycard/index",
+      "style": {
+        "navigationBarTitleText": "我的名片",
+        "navigationBarBackgroundColor": "#F8FAFD"
+      }
+    },
+    {
+      "path": "pages/mycard/edit",
+      "style": {
+        "navigationBarTitleText": "名片编辑",
+        "navigationBarBackgroundColor": "#F8FAFD"
+      }
+    },
+    {
+      "path": "pages/mycard/editStyle",
+      "style": {
+        "navigationBarTitleText": "设置名片样式",
+        "navigationBarBackgroundColor": "#F8FAFD"
+      }
+    },
+    {
+      "path": "pages/share/share",
+      "style": {
+        "navigationBarTitleText": "推荐智信",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/group/group-nickname",
+      "style": {
+        "navigationBarTitleText": "修改昵称",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/invite/invite",
+      "style": {
+        "navigationBarTitleText": "智信邀请",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/group/group-groupname",
+      "style": {
+        "navigationBarTitleText": "修改圈子名称",
+        "enablePullDownRefresh": false
+      }
+    },
+    {
+      "path": "pages/group/group-notice",
+      "style": {
+        "navigationBarTitleText": "设置群公告",
+        "enablePullDownRefresh": false
+      }
+    }
+  ],
+  "entryPagePath": "pages/home/home",
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+	"globalStyle": {
+		"navigationBarTitleText": "智信ILink",
+		"navigationBarTextStyle": "black",
+		"navigationBarBackgroundColor": "#F8FAFD",
+		"backgroundColor": "#F8FAFD"
+	},"tabBar": {
+		"color": "#4E5969",
+		"selectedColor": "#2EA7E0",
+		"borderStyle": "black",
+		"backgroundColor": "#fff",
+		"list": [{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/tarbar/home.png",
+				"selectedIconPath": "static/tarbar/home_active.png",
+				"text": "主页"
+			},
+			{
+				"pagePath": "pages/chat/chat",
+				"iconPath": "static/tarbar/chat.png",
+				"selectedIconPath": "static/tarbar/chat_active.png",
+				"text": "消息"
+			},
+			{
+				"pagePath": "pages/friend/friend",
+				"iconPath": "static/tarbar/friend.png",
+				"selectedIconPath": "static/tarbar/friend_active.png",
+				"text": "好友"
+			},
+			{
+				"pagePath": "pages/group/group",
+				"iconPath": "static/tarbar/group.png",
+				"selectedIconPath": "static/tarbar/group_active.png",
+				"text": "圈子"
+			}
+		]
+	},
+	"uniIdRouter": {}
+}

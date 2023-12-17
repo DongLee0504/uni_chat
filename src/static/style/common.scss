@@ -1,0 +1,30 @@
+// 通用弹窗样式
+.common_dialog {
+	::v-deep .uni-dialog-title {
+		.uni-dialog-title-text {
+			color: #1d2129;
+			font-size: 32rpx;
+		}
+	}
+	::v-deep.uni-dialog-button-group {
+		padding: 0 36rpx;
+		border: none;
+		.uni-dialog-button {
+			font-size: 28rpx;
+			margin-bottom: 20rpx;
+			height: 80rpx;
+			line-height: 80rpx;
+			padding: 0 20rpx;
+			border-radius: 80rpx;
+			border: 2rpx solid #e8eaed;
+			&:last-child {
+				margin-left: 40rpx;
+				border: 0;
+				background: #2ea7e0;
+				.uni-button-color {
+					color: #fff;
+				}
+			}
+		}
+	}
+}
