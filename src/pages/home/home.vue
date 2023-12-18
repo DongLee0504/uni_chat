@@ -126,7 +126,7 @@
 
 <script setup>
 import { getMenuButtonBoundingClientRect } from '../../common/util.js';
-import { getCurrentInstance, onMounted, reactive, computed} from 'vue';
+import { getCurrentInstance, onMounted, reactive, computed } from 'vue';
 import { onShow } from "@dcloudio/uni-app";
 const { proxy } = getCurrentInstance();
 const systemInfo = uni.getSystemInfoSync()
