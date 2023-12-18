@@ -6,11 +6,11 @@
 		<view class="bar_box" :style="{ height: menuButtonInfo.height + 'px' }" @click="handleToMine()"><uni-icons type="bars"
 				size="18"></uni-icons></view>
 		<view class="tabs">
-			<view class="tab" :class="curTab == 1 ? 'active' : ''" @click="changeTab(1)">首页</view>
-			<view class="tab" :class="curTab == 2 ? 'active' : ''" @click="changeTab(2)">知本家课程</view>
-			<view class="tab" :class="curTab == 3 ? 'active' : ''" @click="changeTab(3)">智信资讯</view>
+			<view class="tab" :class="state.curTab == 1 ? 'active' : ''" @click="changeTab(1)">首页</view>
+			<view class="tab" :class="state.curTab == 2 ? 'active' : ''" @click="changeTab(2)">知本家课程</view>
+			<view class="tab" :class="state.curTab == 3 ? 'active' : ''" @click="changeTab(3)">智信资讯</view>
 		</view>
-		<view class="content" v-show="curTab === 1">
+		<view class="content" v-show="state.curTab === 1">
 			<view class="card"
 				:class="{ orange: userStore.userInfo.status == 0, red: userStore.userInfo.status == 2 || userStore.userInfo.status == 3 }">
 				<view class="card_content">
@@ -28,7 +28,7 @@
 					:class="{ space_between: userStore.userInfo.status != 0 && userStore.userInfo.status != 1 }">
 					<text class="text"
 						:class="{ orange: userStore.userInfo.status == 0, red: userStore.userInfo.status == 2 || userStore.userInfo.status == 3 }">
-						{{ statusObj[userStore.userInfo.status] || '您暂未认证个人信息，暂无权限使用本功能' }}
+						{{ state.statusObj[userStore.userInfo.status] || '您暂未认证个人信息，暂无权限使用本功能' }}
 					</text>
 					<text class="btn_auth" :class="{ red: userStore.userInfo.status == 2 || userStore.userInfo.status == 3 }"
 						v-if="userStore.userInfo.status != 0 && userStore.userInfo.status != 1">
@@ -39,14 +39,14 @@
 			<view class="stat_box">
 				<view class="item item1">
 					<view class="s_i_left">
-						<text class="text1">{{ censusCountInfo.authUserCount.toLocaleString() }}</text>
+						<text class="text1">{{ state.censusCountInfo.authUserCount.toLocaleString() }}</text>
 						<text class="text2">总用户数</text>
 					</view>
 					<icon class="s_i_icon"></icon>
 				</view>
 				<view class="item item2">
 					<view class="s_i_left">
-						<text class="text1">{{ censusCountInfo.authCompanyCount.toLocaleString() }}</text>
+						<text class="text1">{{ state.censusCountInfo.authCompanyCount.toLocaleString() }}</text>
 						<text class="text2">总机构数</text>
 					</view>
 					<icon class="s_i_icon"></icon>
@@ -54,14 +54,14 @@
 			</view>
 			<view class="list_box">
 				<view class="list_tabs">
-					<view class="tab" :class="curListTab == 1 ? 'active' : ''" @click="handleListTabChange(1)">活跃用户</view>
-					<view class="tab" :class="curListTab == 2 ? 'active' : ''" @click="handleListTabChange(2)">活跃企业</view>
-					<view class="tab" :class="curListTab == 3 ? 'active' : ''" @click="handleListTabChange(3)">热门圈子</view>
-					<view class="tab" :class="curListTab == 4 ? 'active' : ''" @click="handleListTabChange(4)">在线时长榜</view>
+					<view class="tab" :class="state.curListTab == 1 ? 'active' : ''" @click="handleListTabChange(1)">活跃用户</view>
+					<view class="tab" :class="state.curListTab == 2 ? 'active' : ''" @click="handleListTabChange(2)">活跃企业</view>
+					<view class="tab" :class="state.curListTab == 3 ? 'active' : ''" @click="handleListTabChange(3)">热门圈子</view>
+					<view class="tab" :class="state.curListTab == 4 ? 'active' : ''" @click="handleListTabChange(4)">在线时长榜</view>
 				</view>
-				<view class="list_content" v-if="curListTab == 1" :style="{ height: listContentHeight() }">
+				<view class="list_content" v-if="state.curListTab == 1" :style="{ height: listContentHeight() }">
 					<view class="item" :class="{ item1: index == 0, item2: index == 1, item3: index == 2 }"
-						v-for="(user, index) in dynamicUserList" :key="user.userId">
+						v-for="(user, index) in state.dynamicUserList" :key="user.userId">
 						<image mode="aspectFill" class="avatar"
 							:class="{ avatar1: index == 0, avatar2: index == 1, avatar3: index == 2 }" :src="user.imgPath"></image>
 						<view class="text_box">
@@ -71,9 +71,9 @@
 						<view class="btn" @click="handleItemBtnClick(user)">{{ user.isFriend ? '发消息' : '加好友' }}</view>
 					</view>
 				</view>
-				<view class="list_content" v-if="curListTab == 2" :style="{ height: listContentHeight() }">
+				<view class="list_content" v-if="state.curListTab == 2" :style="{ height: listContentHeight() }">
 					<view class="item" :class="{ item1: index == 0, item2: index == 1, item3: index == 2 }"
-						v-for="(company, index) in dynamicCompanyList" :key="company.dtseccode">
+						v-for="(company, index) in state.dynamicCompanyList" :key="company.dtseccode">
 						<image mode="aspectFill" class="avatar square"
 							:class="{ avatar1: index == 0, avatar2: index == 1, avatar3: index == 2 }" :src="company.companyLogo">
 						</image>
@@ -83,9 +83,9 @@
 						</view>
 					</view>
 				</view>
-				<view class="list_content" v-if="curListTab == 3" :style="{ height: listContentHeight() }">
+				<view class="list_content" v-if="state.curListTab == 3" :style="{ height: listContentHeight() }">
 					<view class="item" :class="{ item1: index == 0, item2: index == 1, item3: index == 2 }"
-						v-for="(group, index) in popularGroupList" :key="group.groupId">
+						v-for="(group, index) in state.popularGroupList" :key="group.groupId">
 						<image mode="aspectFill" class="avatar"
 							:class="{ avatar1: index == 0, avatar2: index == 1, avatar3: index == 2 }" :src="group.headImage"></image>
 						<view class="text_box">
@@ -94,15 +94,15 @@
 						</view>
 					</view>
 				</view>
-				<view class="list_content" v-if="curListTab == 4" :style="{ height: listContentHeight() }">
+				<view class="list_content" v-if="state.curListTab == 4" :style="{ height: listContentHeight() }">
 					<view class="duration_tabs">
-						<text class="tab_item" :class="curDurationTab == 1 ? 'active' : ''"
+						<text class="tab_item" :class="state.curDurationTab == 1 ? 'active' : ''"
 							@click="handleDurationTabChange(1)">本周</text>
-						<text class="tab_item" :class="curDurationTab == 2 ? 'active' : ''"
+						<text class="tab_item" :class="state.curDurationTab == 2 ? 'active' : ''"
 							@click="handleDurationTabChange(2)">本月</text>
 					</view>
 					<view class="item" :class="{ item1: index == 0, item2: index == 1, item3: index == 2 }"
-						v-for="(user, index) in onlineDurationList" :key="user.userId">
+						v-for="(user, index) in state.onlineDurationList" :key="user.userId">
 						<image mode="aspectFill" class="avatar"
 							:class="{ avatar1: index == 0, avatar2: index == 1, avatar3: index == 2 }" :src="user.imgPath"></image>
 						<view class="text_box">
@@ -116,167 +116,160 @@
 			</view>
 		</view>
 
-		<course-list v-show="curTab === 2"></course-list>
-		<zixun v-show="curTab === 3"></zixun>
+		<course-list v-show="state.curTab === 2"></course-list>
+		<zixun v-show="state.curTab === 3"></zixun>
 
-		<auth-tips :type="1" :visible="authTipsPopupVisible" @comfirm="handleConfirm"
+		<auth-tips :type="1" :visible="state.authTipsPopupVisible" @comfirm="handleConfirm"
 			@visibleChange="handleCancel"></auth-tips>
 	</view>
 </template>
 
-<script>
+<script setup>
 import { getMenuButtonBoundingClientRect } from '../../common/util.js';
-export default {
-	data() {
-		return {
-			curTab: 1,
-			curListTab: 1,
-			curDurationTab: 1,
-			menuButtonInfo: getMenuButtonBoundingClientRect(),
-			systemInfo: uni.getSystemInfoSync(),
-			statusObj: {
-				0: '审核中，请耐心等待~，您目前有48小时的试用时间。',
-				1: '认证成功，好友列表可能发生变动，请悉知！',
-				2: '驳回',
-				3: '停用'
-			},
-			censusCountInfo: {
-				authUserCount: 0,
-				authCompanyCount: 0
-			}, // 统计
-			dynamicUserList: [], // 活跃用户
-			dynamicCompanyList: [], // 活跃企业
-			popularGroupList: [], // 热门圈子
-			onlineDurationList: [], // 在线时长
-			authTipsPopupVisible: false
-		};
+import { getCurrentInstance, onMounted, reactive, computed} from 'vue';
+import { onShow } from "@dcloudio/uni-app";
+const { proxy } = getCurrentInstance();
+const systemInfo = uni.getSystemInfoSync()
+const menuButtonInfo = getMenuButtonBoundingClientRect()
+const state = reactive({
+	curTab: 1,
+	curListTab: 1,
+	curDurationTab: 1,
+	statusObj: {
+		0: '审核中，请耐心等待~，您目前有48小时的试用时间。',
+		1: '认证成功，好友列表可能发生变动，请悉知！',
+		2: '驳回',
+		3: '停用'
 	},
-	computed: {
-		userStore() {
-			return this.$store.state.userStore;
-		}
-	},
-	methods: {
-		changeTab(tab) {
-			this.curTab = tab;
-		},
-		// 跳转我的
-		handleToMine() {
-			uni.navigateTo({
-				url: '/pages/mine/mine'
-			});
-		},
-		handleCardClick() {
-			if (this.userStore.userInfo.status != 0 && this.userStore.userInfo.status != 1) {
-				// 未认证
-				this.authTipsPopupVisible = true;
-			} else {
-				uni.navigateTo({ url: '/pages/mycard/index' })
-			}
-		},
-		// 认证提示关闭
-		handleCancel() {
-			this.authTipsPopupVisible = false;
-		},
-		// 认证提示确定
-		handleConfirm() {
-			this.authTipsPopupVisible = false;
-			uni.navigateTo({ url: '/pages/identityAuth/index' })
-		},
-		handleListTabChange(tab) {
-			if (this.curListTab == tab) return;
-			this.curListTab = tab;
-		},
-		handleDurationTabChange(tab) {
-			if (this.curDurationTab == tab) return;
-			this.curDurationTab = tab;
-			this.ajaxGetOnlineDurationList();
-		},
-		// 活跃用户点击
-		handleItemBtnClick(user) {
-			if (user.isFriend) {
-				const chat = {
-					type: "PRIVATE",
-					targetId: user.userId,
-					showName: user.userName,
-					headImage: user.imgPath,
-					secname: user.secname,
-				};
-				this.$store.commit("openChat", chat);
-				uni.navigateTo({
-					url: '/pages/chat/chat-box?chatIdx=0'
-				})
-			} else {
-				uni.navigateTo({
-					url: '/pages/common/user-info?id=' + user.userId
-				})
-			}
-		},
-		listContentHeight() {
-			return `calc(100vh - ${this.systemInfo.safeAreaInsets.top}px - ${this.menuButtonInfo.height}px - 80rpx - 302rpx - 132rpx - 190rpx)`;
-		},
-		// 统计
-		ajaxGetCensusCount() {
-			this.$http({
-				url: '/im/auth/getCensusCount',
-				method: 'get'
-			}).then((res) => {
-				this.censusCountInfo = res.data;
-			});
-		},
-		// 活跃用户
-		ajaxGetDynamicUserList() {
-			this.$http({
-				url: '/im/dynamic/getDynamicUserList',
-				method: 'get'
-			}).then((res) => {
-				this.dynamicUserList = res.data;
-			});
-		},
-		//活跃企业
-		ajaxGetDynamicCompanyList() {
-			this.$http({
-				url: '/im/dynamic/getDynamicCompanyList',
-				method: 'get'
-			}).then((res) => {
-				this.dynamicCompanyList = res.data;
-			});
-		},
-		// 热门圈子
-		ajaxGetPopularGroupList() {
-			this.$http({
-				url: '/im/dynamic/getPopularGroupList',
-				method: 'get'
-			}).then((res) => {
-				this.popularGroupList = res.data;
-			});
-		},
-		// 在线时长
-		ajaxGetOnlineDurationList() {
-			this.$http({
-				url: '/im/dynamic/getOnlineDurationList',
-				method: 'post',
-				data: {
-					selectedMonth: this.curDurationTab == 1 ? false : true
-				}
-			}).then((res) => {
-				this.onlineDurationList = res.data;
-			});
-		}
-	},
-	mounted() {
-		this.ajaxGetCensusCount();
-		this.ajaxGetDynamicUserList();
-		this.ajaxGetDynamicCompanyList();
-		this.ajaxGetPopularGroupList();
-		this.ajaxGetOnlineDurationList();
-	},
-	onShow() {
-		const app = getApp();
-		const unreadCount = app.getTotalUnreadCount();
-		app.refreshUnreadBadge(unreadCount);
+	censusCountInfo: {
+		authUserCount: 0,
+		authCompanyCount: 0
+	}, // 统计
+	dynamicUserList: [], // 活跃用户
+	dynamicCompanyList: [], // 活跃企业
+	popularGroupList: [], // 热门圈子
+	onlineDurationList: [], // 在线时长
+	authTipsPopupVisible: false
+})
+const userStore = computed(() => proxy.$store.state.userStore)
+const changeTab = (tab) => {
+	state.curTab = tab;
+}
+// 跳转我的
+const handleToMine = () => {
+	uni.navigateTo({
+		url: '/pages/mine/mine'
+	});
+}
+const handleCardClick = () => {
+	if (userStore.userInfo.status != 0 && userStore.userInfo.status != 1) {
+		// 未认证
+		state.authTipsPopupVisible = true;
+	} else {
+		uni.navigateTo({ url: '/pages/mycard/index' })
 	}
-};
+}
+// 认证提示关闭
+const handleCancel = () => {
+	state.authTipsPopupVisible = false;
+}
+// 认证提示确定
+const handleConfirm = () => {
+	state.authTipsPopupVisible = false;
+	uni.navigateTo({ url: '/pages/identityAuth/index' })
+}
+const handleListTabChange = (tab) => {
+	if (state.curListTab == tab) return;
+	state.curListTab = tab;
+}
+const handleDurationTabChange = (tab) => {
+	if (state.curDurationTab == tab) return;
+	state.curDurationTab = tab;
+	ajaxGetOnlineDurationList();
+}
+// 活跃用户点击
+const handleItemBtnClick = (user) => {
+	if (user.isFriend) {
+		const chat = {
+			type: "PRIVATE",
+			targetId: user.userId,
+			showName: user.userName,
+			headImage: user.imgPath,
+			secname: user.secname,
+		};
+		proxy.$store.commit("openChat", chat);
+		uni.navigateTo({
+			url: '/pages/chat/chat-box?chatIdx=0'
+		})
+	} else {
+		uni.navigateTo({
+			url: '/pages/common/user-info?id=' + user.userId
+		})
+	}
+}
+const listContentHeight = () => {
+	return `calc(100vh - ${systemInfo.safeAreaInsets.top}px - ${menuButtonInfo.height}px - 80rpx - 302rpx - 132rpx - 190rpx)`;
+}
+// 统计
+const ajaxGetCensusCount = () => {
+	proxy.$http({
+		url: '/im/auth/getCensusCount',
+		method: 'get'
+	}).then((res) => {
+		state.censusCountInfo = res.data;
+	});
+}
+// 活跃用户
+const ajaxGetDynamicUserList = () => {
+	proxy.$http({
+		url: '/im/dynamic/getDynamicUserList',
+		method: 'get'
+	}).then((res) => {
+		state.dynamicUserList = res.data;
+	});
+}
+//活跃企业
+const ajaxGetDynamicCompanyList = () => {
+	proxy.$http({
+		url: '/im/dynamic/getDynamicCompanyList',
+		method: 'get'
+	}).then((res) => {
+		state.dynamicCompanyList = res.data;
+	});
+}
+// 热门圈子
+const ajaxGetPopularGroupList = () => {
+	proxy.$http({
+		url: '/im/dynamic/getPopularGroupList',
+		method: 'get'
+	}).then((res) => {
+		state.popularGroupList = res.data;
+	});
+}
+// 在线时长
+const ajaxGetOnlineDurationList = () => {
+	proxy.$http({
+		url: '/im/dynamic/getOnlineDurationList',
+		method: 'post',
+		data: {
+			selectedMonth: state.curDurationTab == 1 ? false : true
+		}
+	}).then((res) => {
+		state.onlineDurationList = res.data;
+	});
+}
+onMounted(() => {
+	ajaxGetCensusCount();
+	ajaxGetDynamicUserList();
+	ajaxGetDynamicCompanyList();
+	ajaxGetPopularGroupList();
+	ajaxGetOnlineDurationList();
+})
+onShow(() => {
+	const app = getApp();
+	const unreadCount = app.getTotalUnreadCount();
+	app.refreshUnreadBadge(unreadCount);
+})
 </script>
 
 <style lang="scss" scoped>

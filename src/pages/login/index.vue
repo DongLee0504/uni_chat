@@ -47,7 +47,7 @@
 
 <script setup>
 import { loginSuccessCallback } from "../../common/util";
-import { reactive, ref, getCurrentInstance } from "vue"
+import { ref, unref, getCurrentInstance } from "vue"
 const { proxy } = getCurrentInstance();
 const checked = ref(false);
 const showMask = ref(false);
@@ -55,13 +55,13 @@ const showMask = ref(false);
 const change = (e) => {
   const values = e.detail.value;
   if (values.length > 0) {
-    this.checked = true;
+    checked.value = true;
   } else {
-    this.checked = false;
+    checked.value = false;
   }
 }
 const handleWeixinLogin = (e) => {
-  if (checked.value) {
+  if (unref(checked)) {
     console.log(e, "e");
     if (e.detail.errMsg == "getPhoneNumber:ok") {
       ajaxWeixinLogin(e.detail.code);
