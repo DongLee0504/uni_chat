@@ -126,7 +126,7 @@
 
 <script setup>
 import { getMenuButtonBoundingClientRect } from '../../common/util.js';
-import { getCurrentInstance, onMounted, reactive, computed } from 'vue';
+import { getCurrentInstance, onMounted, reactive, computed,unref } from 'vue';
 import { onShow } from "@dcloudio/uni-app";
 const { proxy } = getCurrentInstance();
 const systemInfo = uni.getSystemInfoSync()
@@ -162,7 +162,7 @@ const handleToMine = () => {
 	});
 }
 const handleCardClick = () => {
-	if (userStore.userInfo.status != 0 && userStore.userInfo.status != 1) {
+	if (unref(userStore).userInfo.status != 0 && unref(userStore).userInfo.status != 1) {
 		// 未认证
 		state.authTipsPopupVisible = true;
 	} else {
