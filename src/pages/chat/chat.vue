@@ -14,99 +14,85 @@
       </view>
     </scroll-view>
 
-    <pop-menu
-      v-show="menu.show"
-      :menu-style="menu.style"
-      :items="menu.items"
-      @close="menu.show = false"
-      @select="onSelectMenu"
-    ></pop-menu>
+    <pop-menu v-show="menu.show" :menu-style="menu.style" :items="menu.items" @close="menu.show = false"
+      @select="onSelectMenu"></pop-menu>
   </view>
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      menu: {
-        show: false,
-        style: "",
-        chatIdx: -1,
-        items: [
-          {
-            key: "DELETE",
-            name: "删除",
-            icon: "icon_delete",
-          },
-          {
-            key: "TOP",
-            name: "置顶",
-            icon: "arrow-up",
-          },
-        ],
+<script setup>
+import { onShow } from "@dcloudio/uni-app";
+import { computed, getCurrentInstance, ref, nextTick } from 'vue'
+const { proxy } = getCurrentInstance();
+const state = ref({
+  menu: {
+    show: false,
+    style: "",
+    chatIdx: -1,
+    items: [
+      {
+        key: "DELETE",
+        name: "删除",
+        icon: "icon_delete",
       },
-    };
+      {
+        key: "TOP",
+        name: "置顶",
+        icon: "arrow-up",
+      },
+    ],
   },
-  methods: {
-    onSelectMenu(item) {
-      switch (item.key) {
-        case "DELETE":
-          this.removeChat(this.menu.chatIdx);
-          break;
-        case "TOP":
-          this.moveToTop(this.menu.chatIdx);
-          break;
-        default:
-          break;
+})
+const onSelectMenu = (item) => {
+  switch (item.key) {
+    case "DELETE":
+      removeChat(this.menu.chatIdx);
+      break;
+    case "TOP":
+      moveToTop(this.menu.chatIdx);
+      break;
+    default:
+      break;
+  }
+  state.menu.show = false;
+}
+const onShowMenu = (e, chatIdx) => {
+  uni.getSystemInfo({
+    success: (res) => {
+      let touches = e.touches[0];
+      let style = "";
+      /* 因 非H5端不兼容 style 属性绑定 Object ，所以拼接字符 */
+      if (touches.clientY > res.windowHeight / 2) {
+        style = `bottom:${res.windowHeight - touches.clientY}px;`;
+      } else {
+        style = `top:${touches.clientY}px;`;
       }
-      this.menu.show = false;
-    },
-    onShowMenu(e, chatIdx) {
-      uni.getSystemInfo({
-        success: (res) => {
-          let touches = e.touches[0];
-          let style = "";
-          /* 因 非H5端不兼容 style 属性绑定 Object ，所以拼接字符 */
-          if (touches.clientY > res.windowHeight / 2) {
-            style = `bottom:${res.windowHeight - touches.clientY}px;`;
-          } else {
-            style = `top:${touches.clientY}px;`;
-          }
-          if (touches.clientX > res.windowWidth / 2) {
-            style += `right:${res.windowWidth - touches.clientX}px;`;
-          } else {
-            style += `left:${touches.clientX}px;`;
-          }
-          this.menu.style = style;
-          this.menu.chatIdx = chatIdx;
-          //
-          this.$nextTick(() => {
-            this.menu.show = true;
-          });
-        },
+      if (touches.clientX > res.windowWidth / 2) {
+        style += `right:${res.windowWidth - touches.clientX}px;`;
+      } else {
+        style += `left:${touches.clientX}px;`;
+      }
+      state.menu.style = style;
+      state.menu.chatIdx = chatIdx;
+      //
+      nextTick(() => {
+        state.menu.show = true;
       });
     },
-    removeChat(chatIdx) {
-      this.$store.commit("removeChat", chatIdx);
-    },
-    moveToTop(chatIdx) {
-      this.$store.commit("moveTop", chatIdx);
-    },
-  },
-  computed: {
-    chatStore() {
-      return this.$store.state.chatStore;
-    },
-    loading() {
-      return this.chatStore.loadingGroupMsg || this.chatStore.loadingPrivateMsg;
-    },
-  },
-  onShow() {
-    const app = getApp();
-    const unreadCount = app.getTotalUnreadCount();
-    app.refreshUnreadBadge(unreadCount);
-  }
-};
+  });
+}
+const removeChat = (chatIdx) => {
+  proxy.$store.commit("removeChat", chatIdx);
+}
+const moveToTop = (chatIdx) => {
+  proxy.$store.commit("moveTop", chatIdx);
+}
+const chatStore = computed(() => proxy.$store.state.chatStore)
+const loading = computed(() => chatStore.loadingGroupMsg || chatStore.loadingPrivateMsg)
+onShow(() => {
+  const app = getApp();
+  const unreadCount = app.getTotalUnreadCount();
+  app.refreshUnreadBadge(unreadCount);
+})
 </script>
 
 <style scoped lang="scss">
