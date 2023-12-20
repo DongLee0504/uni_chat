@@ -14,14 +14,14 @@
       </view>
     </scroll-view>
 
-    <pop-menu v-show="menu.show" :menu-style="menu.style" :items="menu.items" @close="menu.show = false"
+    <pop-menu v-show="state.menu.show" :menu-style="state.menu.style" :items="state.menu.items" @close="state.menu.show = false"
       @select="onSelectMenu"></pop-menu>
   </view>
 </template>
 
 <script setup>
 import { onShow } from "@dcloudio/uni-app";
-import { computed, getCurrentInstance, ref, nextTick } from 'vue'
+import { computed, getCurrentInstance, ref, unref, nextTick } from 'vue'
 const { proxy } = getCurrentInstance();
 const state = ref({
   menu: {
@@ -45,10 +45,10 @@ const state = ref({
 const onSelectMenu = (item) => {
   switch (item.key) {
     case "DELETE":
-      removeChat(this.menu.chatIdx);
+      removeChat(unref(state).menu.chatIdx);
       break;
     case "TOP":
-      moveToTop(this.menu.chatIdx);
+      moveToTop(unref(state).menu.chatIdx);
       break;
     default:
       break;
@@ -71,11 +71,11 @@ const onShowMenu = (e, chatIdx) => {
       } else {
         style += `left:${touches.clientX}px;`;
       }
-      state.menu.style = style;
-      state.menu.chatIdx = chatIdx;
+      unref(state).menu.style = style;
+      unref(state).menu.chatIdx = chatIdx;
       //
       nextTick(() => {
-        state.menu.show = true;
+        unref(state).menu.show = true;
       });
     },
   });
