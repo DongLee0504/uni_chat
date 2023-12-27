@@ -89,7 +89,7 @@ const handleToApply = () => {
 }
 const handleGoProtocol = (type) => {
   let src = '';
-  const baseUrl = process.env.H5_URL
+  const baseUrl = import.meta.env.VITE_H5_URL
   if (type == 'agreement') {
     src = encodeURIComponent(`${baseUrl}/agreementZhixin.html`)
   } else {
