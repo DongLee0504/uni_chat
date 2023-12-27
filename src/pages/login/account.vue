@@ -82,7 +82,7 @@ const showDialog = () => {
 const dialogConfirm = () => {
 	state.checked = true;
 	const formRef = state.activeKey == 1 ? mobileLoginRef : accountLoginRef;
-	accountLoginRef.value.handleLogin();
+	formRef.value.handleLogin();
 }
 </script>
 
