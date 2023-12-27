@@ -1,25 +1,29 @@
 <template>
 	<view class="content">
-		<view class="status_bar" :style="{ height: systemInfo.safeAreaInsets.top + 'px' }">
+		<view class="status_bar" :style="{ height: state.systemInfo.safeAreaInsets.top + 'px' }">
 			<!-- 这里是状态栏 -->
 		</view>
 		<back @handleBack="handleBack()"></back>
 		<view class="logo_box">
-			<image class="logo" src="https://idtcdn-1309770014.oss-cn-shanghai.aliyuncs.com/rz/zhixin_applets/images/login_image/logo.svg"></image>
+			<image class="logo"
+				src="https://idtcdn-1309770014.oss-cn-shanghai.aliyuncs.com/rz/zhixin_applets/images/login_image/logo.svg">
+			</image>
 		</view>
 		<view class="slogen">欢迎使用智信</view>
 		<view class="form_box" :style="{ height: formHeight() }">
 			<view class="tab_header">
-				<view :class="{ title: true, active: activeKey == 1 }" @click="activeKey = 1">手机登录</view>
-				<view :class="{ title: true, active: activeKey == 2 }" @click="activeKey = 2">账号登录</view>
+				<view :class="{ title: true, active: state.activeKey == 1 }" @click="state.activeKey = 1">手机登录</view>
+				<view :class="{ title: true, active: state.activeKey == 2 }" @click="state.activeKey = 2">账号登录</view>
 			</view>
 			<view class="tab_content">
-				<mobile-login ref="mobileLogin" class="mobile_form" v-if="activeKey == 1" :protocolChecked="checked" @showDialog="showDialog()"></mobile-login>
-				<account-login ref="accountLogin" v-if="activeKey == 2" :protocolChecked="checked" @showDialog="showDialog()"></account-login>
+				<mobile-login ref="mobileLoginRef" class="mobile_form" v-if="state.activeKey == 1" :protocolChecked="state.checked"
+					@showDialog="showDialog()"></mobile-login>
+				<account-login ref="accountLoginRef" v-if="state.activeKey == 2" :protocolChecked="state.checked"
+					@showDialog="showDialog()"></account-login>
 			</view>
 			<view class="protocol">
 				<checkbox-group @change="checkboxChange">
-					<checkbox :value="1" :checked="checked" color="#2EA7E0" style="transform: scale(0.7)" />
+					<checkbox :value="1" :checked="state.checked" color="#2EA7E0" style="transform: scale(0.7)" />
 					<text>已阅读并同意</text>
 					<text class="link">《用户协议》</text>
 					<text>和</text>
@@ -27,7 +31,7 @@
 				</checkbox-group>
 			</view>
 		</view>
-		<common-dialog ref="commonDialog" class="common_dialog" @dialogConfirm="dialogConfirm()">
+		<common-dialog ref="commonDialogRef" class="common_dialog" @dialogConfirm="dialogConfirm()">
 			<view>
 				<text>已阅读并同意</text>
 				<text class="link">《用户协议》</text>
@@ -38,48 +42,48 @@
 	</view>
 </template>
 
-<script>
+<script setup>
 import { getMenuButtonBoundingClientRect } from '../../common/util.js';
 import Back from '../../components/back/back.vue';
 import MobileLogin from '../../components/mobile-login/mobile-login.vue';
 import AccountLogin from '../../components/account-login/account-login.vue';
 import CommonDialog from '../../components/common-dialog/common-dialog.vue';
-export default {
-	data() {
-		return {
-			menuButtonInfo: getMenuButtonBoundingClientRect(),
-			systemInfo: uni.getSystemInfoSync(),
-			activeKey: 1,
-			checked: false
-		};
-	},
-	methods: {
-		checkboxChange(e) {
-			const values = e.detail.value;
-			if (values.length > 0) {
-				this.checked = true;
-			} else {
-				this.checked = false;
-			}
-		},
-		handleBack() {
-			uni.navigateTo({
-				url: '/pages/login/index'
-			});
-		},
-		formHeight() {
-			return `calc(100vh - ${this.systemInfo.safeAreaInsets.top}px - ${this.menuButtonInfo.height}px - 80rpx -  225rpx)`;
-		},
-		showDialog() {
-			this.$refs.commonDialog.open();
-		},
-		dialogConfirm() {
-			this.checked = true;
-			const form = this.activeKey == 1 ? 'mobileLogin' : 'accountLogin';
-			this.$refs[form].handleLogin();
-		}
+import { reactive, ref, toRaw } from 'vue';
+
+const commonDialogRef = ref(null);
+const mobileLoginRef = ref(null);
+const accountLoginRef = ref(null);
+const state = reactive({
+	menuButtonInfo: getMenuButtonBoundingClientRect(),
+	systemInfo: uni.getSystemInfoSync(),
+	activeKey: 1,
+	checked: false
+});
+const checkboxChange = (e) => {
+	const values = e.detail.value;
+	if (values.length > 0) {
+		state.checked = true;
+	} else {
+		state.checked = false;
 	}
-};
+}
+
+const handleBack = () => {
+	uni.navigateTo({
+		url: '/pages/login/index'
+	});
+}
+const formHeight = () => {
+	return `calc(100vh - ${state.systemInfo.safeAreaInsets.top}px - ${state.menuButtonInfo.height}px - 80rpx -  225rpx)`;
+}
+const showDialog = () => {
+	commonDialogRef.value.open();
+}
+const dialogConfirm = () => {
+	state.checked = true;
+	const formRef = state.activeKey == 1 ? mobileLoginRef : accountLoginRef;
+	accountLoginRef.value.handleLogin();
+}
 </script>
 
 <style lang="scss" scoped>
